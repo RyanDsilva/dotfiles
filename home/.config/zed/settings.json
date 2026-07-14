@@ -1,0 +1,103 @@
+// Zed - edit directly (or via Zed's UI); symlinked to ~/.config/zed/settings.json.
+// Extensions in `auto_install_extensions` are installed automatically on launch.
+{
+  "theme": { "mode": "system", "light": "Catppuccin Latte", "dark": "Catppuccin Frappé" },
+  "icon_theme": "Catppuccin Frappé",
+
+  // Fonts. family/features are portable; sizes are the machine-specific bit.
+  "buffer_font_family": "Maple Mono",
+  "buffer_font_size": 15,
+  "buffer_font_features": { "calt": true },
+  "ui_font_family": "Maple Mono",
+  "ui_font_size": 15,
+  "terminal": {
+    "font_family": "Maple Mono",
+    "font_size": 14,
+    "copy_on_select": true,
+    "cursor_shape": "block",
+    "blinking": "off"
+  },
+
+  "vim_mode": false,
+  "telemetry": { "diagnostics": false, "metrics": false },
+  "autosave": "on_focus_change",
+  "format_on_save": "on",
+  "soft_wrap": "editor_width",
+  "tab_size": 2,
+  "relative_line_numbers": false,
+
+  // Minimal UI
+  "minimap": { "show": "auto", "thumb": "hover" },
+  "scrollbar": { "show": "auto" },
+  "toolbar": { "breadcrumbs": true, "quick_actions": false },
+  "indent_guides": { "enabled": true },
+  "auto_signature_help": true,
+
+  "git": {
+    "git_gutter": "tracked_files",
+    "inline_blame": { "enabled": true, "delay_ms": 600 }
+  },
+
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true
+  },
+
+  "agent": {
+    "dock": "right",
+    "default_profile": "write"
+  },
+
+  "auto_install_extensions": {
+    "catppuccin": true,
+    "biome": true,
+    "toml": true
+  },
+
+  "languages": {
+    "TypeScript": {
+      "tab_size": 2,
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true
+      }
+    },
+    "TSX": { "tab_size": 2, "formatter": { "language_server": { "name": "biome" } } },
+    "JavaScript": { "tab_size": 2, "formatter": { "language_server": { "name": "biome" } } },
+    "JSON": { "tab_size": 2, "formatter": { "language_server": { "name": "biome" } } },
+
+    "Python": {
+      "tab_size": 4,
+      "language_servers": ["basedpyright", "ruff", "!pyright", "!pylsp"],
+      "format_on_save": "on",
+      "formatter": { "language_server": { "name": "ruff" } },
+      "code_actions_on_format": { "source.organizeImports.ruff": true }
+    },
+
+    "Rust": { "tab_size": 4, "formatter": "language_server" },
+
+    "Go": {
+      "tab_size": 4,
+      "hard_tabs": true,
+      "formatter": "language_server",
+      "code_actions_on_format": { "source.organizeImports": true }
+    }
+  },
+
+  "lsp": {
+    "ruff": { "initialization_options": { "settings": { "lineLength": 88 } } },
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": { "command": "clippy" }
+      }
+    },
+    "gopls": {
+      "initialization_options": {
+        "hints": { "assignVariableTypes": true, "parameterNames": true, "rangeVariableTypes": true }
+      }
+    }
+  }
+}

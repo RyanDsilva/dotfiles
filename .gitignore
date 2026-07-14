@@ -1,0 +1,19 @@
+# herdr runtime artifacts (regenerated at runtime; never commit)
+home/.config/herdr/*.log
+home/.config/herdr/session.json
+home/.config/herdr/*.sock
+
+# Claude Code local state / secrets - never commit
+home/.claude/settings.local.json
+home/.claude/.credentials.json
+home/.claude/projects/
+home/.claude/todos/
+home/.claude/shell-snapshots/
+
+# macOS + nix build noise
+.DS_Store
+result
+result-*
+
+# no-mistakes local validation state - never commit in this public repo
+.no-mistakes/

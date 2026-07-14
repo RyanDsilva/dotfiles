@@ -1,0 +1,38 @@
+# Ghostty - edit this file directly; it is symlinked to ~/.config/ghostty/config.
+# Docs: https://ghostty.org/docs/config
+
+# Font
+font-family = Maple Mono
+font-size = 15
+font-feature = calt          # ligatures
+
+# Theme: follows system light/dark (Catppuccin, built in)
+theme = light:catppuccin-latte,dark:catppuccin-frappe
+
+# Pastel translucency
+background-opacity = 0.85
+background-blur = true
+
+# Window
+window-padding-x = 12
+window-padding-y = 12
+window-padding-balance = true
+window-save-state = always
+macos-titlebar-style = tabs
+macos-option-as-alt = true    # Alt works for word motions / readline
+
+# Cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+# Behavior
+copy-on-select = clipboard
+scrollback-limit = 10000000
+confirm-close-surface = false
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# herdr owns panes / tabs / workspaces, so no split keybinds here on purpose -
+# keeping Ghostty a thin, fast surface avoids clashing with herdr's chords.
+keybind = cmd+enter=toggle_fullscreen

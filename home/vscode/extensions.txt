@@ -1,0 +1,28 @@
+# VS Code extensions - installed non-interactively by bootstrap.sh via
+#   code --install-extension <id> --force
+# One id per line. Lines starting with # are ignored.
+
+# Theme
+Catppuccin.catppuccin-vsc
+Catppuccin.catppuccin-vsc-icons
+
+# Diagnostics
+usernamehw.errorlens
+
+# JS / TS
+biomejs.biome
+
+# Python
+ms-python.python
+charliermarsh.ruff
+ms-python.vscode-pylance
+
+# Rust
+rust-lang.rust-analyzer
+
+# Go
+golang.go
+
+# Config formats
+tamasfe.even-better-toml
+editorconfig.editorconfig

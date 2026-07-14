@@ -1,0 +1,70 @@
+// VS Code - edit directly (or via the UI); symlinked to
+// ~/Library/Application Support/Code/User/settings.json.
+// Install the matching extensions with: bootstrap.sh (or `code --install-extension`
+// from home/vscode/extensions.txt).
+{
+  // Appearance
+  "workbench.colorTheme": "Catppuccin Frappé",
+  "catppuccin.accentColor": "blue",
+  "workbench.iconTheme": "catppuccin-frappe",
+  "editor.fontFamily": "Maple Mono, monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "terminal.integrated.fontFamily": "Maple Mono",
+
+  // Minimal chrome
+  "workbench.activityBar.location": "top",
+  "editor.minimap.enabled": false,
+  "breadcrumbs.enabled": true,
+  "editor.stickyScroll.enabled": true,
+  "window.commandCenter": false,
+
+  // Telemetry off
+  "telemetry.telemetryLevel": "off",
+  "redhat.telemetry.enabled": false,
+
+  // Formatting
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": { "source.organizeImports": "explicit" },
+
+  "[typescript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[typescriptreact]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[javascript]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[json]": { "editor.defaultFormatter": "biomejs.biome" },
+  "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
+
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.ruff": "explicit",
+      "source.organizeImports.ruff": "explicit"
+    }
+  },
+  "python.languageServer": "Default",
+
+  "[rust]": { "editor.defaultFormatter": "rust-lang.rust-analyzer" },
+  "rust-analyzer.check.command": "clippy",
+
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.codeActionsOnSave": { "source.organizeImports": "explicit" }
+  },
+  "go.useLanguageServer": true,
+
+  // Error Lens
+  "errorLens.enabledDiagnosticLevels": ["error", "warning", "info"],
+
+  // Clean workspace
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/__pycache__": true,
+    "**/.ruff_cache": true,
+    "**/target": true,
+    "**/.pytest_cache": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}
