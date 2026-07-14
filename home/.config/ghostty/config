@@ -2,12 +2,14 @@
 # Docs: https://ghostty.org/docs/config
 
 # Font
-font-family = Maple Mono
+font-family = Maple Mono NF
 font-size = 15
-font-feature = calt          # ligatures
+# calt = ligatures
+font-feature = calt
 
 # Theme: follows system light/dark (Catppuccin, built in)
-theme = light:catppuccin-latte,dark:catppuccin-frappe
+# NOTE: Ghostty theme names are the exact built-in filenames (Title Case, spaces).
+theme = light:Catppuccin Latte,dark:Catppuccin Frappe
 
 # Pastel translucency
 background-opacity = 0.85
@@ -19,7 +21,9 @@ window-padding-y = 12
 window-padding-balance = true
 window-save-state = always
 macos-titlebar-style = tabs
-macos-option-as-alt = true    # Alt works for word motions / readline
+# Alt works for word motions / readline. Ghostty has no inline comments,
+# so keep notes like this on their own line - never after a value.
+macos-option-as-alt = true
 
 # Cursor
 cursor-style = block

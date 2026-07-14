@@ -126,9 +126,9 @@
       "hf"             # Hugging Face CLI
       "cocoapods"      # Flutter/iOS builds need it
       "duti"           # set Ghostty as default terminal handler (used by bootstrap.sh)
-      "1password-cli"  # the `op` command
     ];
     casks = [
+      "1password-cli"        # the `op` command (distributed as a cask, not a formula)
       "ghostty"              # terminal
       "zed"                  # editor (daily)
       "visual-studio-code"   # editor (fallback / heavy extensions)

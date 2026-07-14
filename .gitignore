@@ -4,6 +4,7 @@ home/.config/herdr/session.json
 home/.config/herdr/*.sock
 
 # Claude Code local state / secrets - never commit
+.claude/settings.local.json
 home/.claude/settings.local.json
 home/.claude/.credentials.json
 home/.claude/projects/

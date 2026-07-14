@@ -32,6 +32,10 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            # If an app already wrote a real file where we want an edit-in-place
+            # symlink (Zed/Claude/VSCode do this on first launch), move it aside
+            # to <file>.hm-backup instead of aborting activation.
+            home-manager.backupFileExtension = "hm-backup";
             home-manager.extraSpecialArgs = { inherit user; };
             home-manager.users.${user} = {
               imports = [

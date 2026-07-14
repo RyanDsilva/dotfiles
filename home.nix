@@ -60,9 +60,18 @@ in
   # ~/Screenshots target for the screencapture.location default set in configuration.nix
   home.file."Screenshots/.keep".text = "";
 
+  # Trusted SSH signing keys, keyed by email (principal), for local commit-signature
+  # verification. Referenced by gpg.ssh.allowedSignersFile in the git config below.
+  home.file.".config/git/allowed_signers".text =
+    "ryan.dsilva.98@gmail.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiPn/1lTAdPv9x4cpS1ZSOLJJ6w78TlhvXFRXT6PSoZ\n";
+
   # -------------------------------------------------------------------- theme
   # Catppuccin Frappé, blue accent, applied to every supported program at once.
   catppuccin = {
+    enable = true;
+    # Keep opting ports in by hand (below) instead of auto-enrolling every
+    # supported program when the new autoEnable default flips on.
+    autoEnable = false;
     flavor = "frappe";
     accent = "blue";
     bat.enable = true;
@@ -132,29 +141,48 @@ in
     enable = true;
     settings = {
       add_newline = false;
-      format = "$directory$git_branch$git_status$cmd_duration$line_break$character";
+      # Tasteful single line: dir + git + nix-shell + relevant language versions.
+      # Language modules only render inside a matching project, so it stays clean.
+      format =
+        "$directory$git_branch$git_status$nix_shell"
+        + "$nodejs$python$golang$rust$cmd_duration$line_break$character";
+
+      directory = {
+        truncation_length = 3;
+        truncate_to_repo = true;
+      };
+
+      git_branch.format = "[$symbol$branch]($style) ";
+      # Compact status glyphs: !modified +staged ?untracked ⇡ahead ⇣behind, etc.
+      git_status = {
+        format = "([$all_status$ahead_behind]($style) )";
+        modified = "!\${count}";
+        staged = "+\${count}";
+        untracked = "?\${count}";
+        stashed = "*\${count}";
+        renamed = "»\${count}";
+        deleted = "✘\${count}";
+        conflicted = "=\${count}";
+        ahead = "⇡\${count}";
+        behind = "⇣\${count}";
+        diverged = "⇕⇡\${ahead_count}⇣\${behind_count}";
+      };
+
+      # Snowflake shows when you're inside a nix/direnv dev shell.
+      nix_shell.format = "[❄️ $name]($style) ";
+
+      cmd_duration.format = "[$duration]($style) ";
+
       character = {
         success_symbol = "[❯](blue)";
         error_symbol = "[❯](red)";
       };
-      cmd_duration.format = "[$duration]($style) ";
     };
   };
 
   # ---------------------------------------------------------------------- git
   programs.git = {
     enable = true;
-    userName = "Ryan Dsilva";
-    userEmail = "ryan.dsilva.98@gmail.com";
-    delta.enable = true;
-    aliases = {
-      s = "status -sb";
-      lg = "log --oneline --graph --decorate";
-      co = "checkout";
-      br = "branch";
-      undo = "reset --soft HEAD~1";
-      amend = "commit --amend --no-edit";
-    };
     ignores = [
       ".DS_Store"
       "result"
@@ -163,7 +191,20 @@ in
       ".env"
       ".env.local"
     ];
-    extraConfig = {
+    # Freeform git config (26.05 renamed userName/userEmail/aliases/extraConfig into this).
+    settings = {
+      user.name = "Ryan Dsilva";
+      user.email = "ryan.dsilva.98@gmail.com";
+
+      alias = {
+        s = "status -sb";
+        lg = "log --oneline --graph --decorate";
+        co = "checkout";
+        br = "branch";
+        undo = "reset --soft HEAD~1";
+        amend = "commit --amend --no-edit";
+      };
+
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
       push.default = "simple";
@@ -190,15 +231,28 @@ in
       # Left off by default so commits never fail before you've done step 1.
       gpg.format = "ssh";
       gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      # user.signingkey = "ssh-ed25519 AAAA... ryan.dsilva.98@gmail.com";
-      commit.gpgsign = false;
+      user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiPn/1lTAdPv9x4cpS1ZSOLJJ6w78TlhvXFRXT6PSoZ ryan.dsilva.98@gmail.com";
+      commit.gpgsign = true;
+      # Lets `git log --show-signature` verify our own SSH-signed commits locally
+      # (GitHub verifies via the Signing key you added there; this is the local half).
+      gpg.ssh.allowedSignersFile = "${config.home.homeDirectory}/.config/git/allowed_signers";
     };
   };
 
+  # delta moved out of programs.git into its own module (26.05). Explicit git
+  # integration replaces the deprecated automatic enablement.
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+  };
+
   # 1Password as the SSH agent (keys never leave 1Password).
+  # enableDefaultConfig = false opts out of home-manager's implicit "*" defaults
+  # (being removed in a future release); we set exactly what we want on "*" instead.
   programs.ssh = {
     enable = true;
-    matchBlocks."*" = {
+    enableDefaultConfig = false;
+    settings."*" = {
       identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     };
   };
