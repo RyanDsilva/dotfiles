@@ -253,7 +253,9 @@ in
     enable = true;
     enableDefaultConfig = false;
     settings."*" = {
-      identityAgent = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      # Path contains a space ("Group Containers"), so it must be quoted in the
+      # generated config or ssh errors with "extra arguments at end of line".
+      identityAgent = ''"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"'';
     };
   };
 
