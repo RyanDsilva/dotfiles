@@ -63,16 +63,48 @@
 
     trackpad.Clicking = true;                   # tap to click
 
-    # Stats menu-bar app, configured declaratively. Adjust keys after tweaking Stats
-    # in its GUI once and running: defaults read eu.exelban.Stats
-    CustomUserPreferences."eu.exelban.Stats" = {
-      CPU_state = "true";
-      RAM_state = "true";
-      Network_state = "true";
-      Battery_state = "false";
-      combinedModulesInOneMenuBar = "true";
-      update-interval = "3";
-      telemetry = "false";
+    CustomUserPreferences = {
+      # Stats menu-bar app. Adjust keys after tweaking Stats in its GUI once and
+      # running: defaults read eu.exelban.Stats
+      "eu.exelban.Stats" = {
+        CPU_state = "true";
+        RAM_state = "true";
+        Network_state = "true";
+        Battery_state = "false";
+        combinedModulesInOneMenuBar = "true";
+        update-interval = "3";
+        telemetry = "false";
+      };
+
+      # --- Privacy / telemetry opt-outs (safe tier, no SIP) ---
+      # Personalized ads + ad tracking
+      "com.apple.AdLib" = {
+        allowApplePersonalizedAdvertising = false;
+        forceLimitAdTracking = true;
+      };
+      # Siri off (Apple Intelligence stays on - handled separately)
+      "com.apple.assistant.support" = { "Assistant Enabled" = false; };
+      "com.apple.Siri" = {
+        StatusMenuVisible = false;
+        VoiceTriggerUserEnabled = false;
+      };
+      # Siri / Spotlight suggestions + Lookup
+      "com.apple.lookup.shared".LookupSuggestionsDisabled = true;
+      "com.apple.suggestions".SuggestionsAppLibraryEnabled = false;
+      # Proactive usage donation
+      "com.apple.UsageTracking" = {
+        CoreDonationsEnabled = false;
+        UDCAutomationEnabled = false;
+      };
+      # No crash-report dialog nag
+      "com.apple.CrashReporter".DialogType = "none";
+    };
+
+    # System-scoped (/Library/Preferences) telemetry opt-out: don't auto-submit
+    # diagnostics to Apple.
+    CustomSystemPreferences."com.apple.SubmitDiagInfo" = {
+      AutoSubmit = false;
+      AutoSubmitVersion = 4;
     };
   };
 

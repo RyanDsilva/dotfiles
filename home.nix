@@ -217,9 +217,17 @@ in
   home.file."Library/Application Support/Code/User/keybindings.json".source =
     mkLink "${dotfiles}/home/vscode/keybindings.json";
 
-  # Claude Code. Secrets (settings.local.json, .credentials.json, project state) live
-  # only in ~/.claude and are never symlinked from or committed to this repo.
+  # Claude Code. Secrets (settings.local.json, .credentials.json) and machine-local
+  # state (projects/ auto-memory) live only in ~/.claude, never symlinked or committed.
+  # Everything below is edit-in-place: tweak a skill/agent/hook here or in ~/.claude,
+  # it's the same file, and it grows with you.
   home.file.".claude/settings.json".source = mkLink "${dotfiles}/home/.claude/settings.json";
   home.file.".claude/statusline.sh".source = mkLink "${dotfiles}/home/.claude/statusline.sh";
   home.file.".claude/CLAUDE.md".source = mkLink "${dotfiles}/home/AGENTS.md";
+  home.file.".claude/agents".source = mkLink "${dotfiles}/home/.claude/agents";
+  home.file.".claude/skills".source = mkLink "${dotfiles}/home/.claude/skills";
+  home.file.".claude/rules".source = mkLink "${dotfiles}/home/.claude/rules";
+  home.file.".claude/hooks".source = mkLink "${dotfiles}/home/.claude/hooks";
+  home.file.".claude/memory/preferences.md".source =
+    mkLink "${dotfiles}/home/.claude/memory/preferences.md";
 }

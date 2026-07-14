@@ -74,6 +74,11 @@ if command -v duti >/dev/null 2>&1; then
   duti -s com.mitchellh.ghostty public.shell-script all 2>/dev/null || true
 fi
 
+echo "==> Step 8: Claude Code MCP servers + plugins"
+if [ -x "$DIR/home/.claude/setup-claude.sh" ]; then
+  "$DIR/home/.claude/setup-claude.sh" || echo "    (setup-claude.sh had issues; re-run it after opening Claude Code once)"
+fi
+
 echo
 echo "==> Done. Use ./rebuild.sh for future changes."
 echo

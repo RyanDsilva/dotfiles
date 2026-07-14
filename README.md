@@ -118,6 +118,35 @@ Nix installs the *managers*; they own per-project versions (no global conflicts)
 - **claude** - the agent CLI (`cc` alias runs it with permissions skipped). Statusline shows model, context %, git branch, and session cost. Desktop notifications fire when it finishes or needs input.
 - **herdr** - terminal multiplexer for supervising multiple agents. Prefix is `Ctrl-b` (see `home/.config/herdr/config.toml`).
 
+## Claude Code
+
+A full, portable Claude Code setup lives under `home/.claude/` and is symlinked edit-in-place, so it travels to any machine and grows as you tune it. Secrets and machine-local state (`settings.local.json`, `.credentials.json`, `projects/` auto-memory) are never committed.
+
+- **Skills** (`skills/`, auto-invoked when relevant): `code-review`, `security-review`, `debugging-protocol`, `plan-writing`, `test-generation`, `explain-codebase`, `handoff` (writes a session summary to `JOURNAL.md`), `reflect` (learns your durable preferences).
+- **Subagents** (`agents/`): `code-reviewer` and `security-auditor` (read-only), `debugger`, `test-writer`, `planner`, `researcher` (cheap web research). Each runs in its own context with scoped tools.
+- **Hooks** (`hooks/`, wired in `settings.json`):
+  - `format.sh` - auto-formats after edits (Biome / Ruff / rustfmt / gofmt).
+  - `guard-bash.sh` / `guard-files.sh` - hard-block `rm -rf`, force-push to main, `sudo`, `curl|sh`, and reads/edits of `.env`/keys. These fire even under `cc` (skip-permissions), because hooks run regardless of permission mode.
+  - `session-start.sh` - injects git branch, recent commits, and the latest `JOURNAL.md` entry at session start.
+  - `notify.sh` - desktop notification + sound (Glass = needs input, Hero = done) with the repo name in the subtitle.
+  - `reflect.sh` - at session end, a scoped headless pass appends durable, cross-project preferences to `memory/preferences.md`. Disable by removing it from the `Stop` hook in `settings.json`.
+- **Per-language rules** (`rules/{go,python,typescript,rust}.md`): your conventions, loaded when relevant. Edit freely.
+- **Memory**: native auto-memory stays on (plain markdown at `~/.claude/projects/<repo>/memory/`). `export-memory.sh` snapshots it to a folder. `memory/preferences.md` is a global, `@import`ed preference store that the `reflect` skill/hook grows over time - version-controlled and inspectable.
+- **Permissions**: a curated allow list plus a hard deny list (secrets, `rm -rf`, force-push, `sudo`) as defense-in-depth for non-skip runs.
+- **MCP + plugins**: `setup-claude.sh` (run by `bootstrap.sh`, idempotent, no secrets) adds the Context7, Playwright, and Sequential-thinking MCP servers and installs the LSP code-intelligence plugins for your four languages.
+
+Tune any of it by editing the files here or in `~/.claude` - they're the same files.
+
+## macOS cleanup (optional, safe-tier)
+
+Privacy/telemetry hardening that keeps SIP on and is fully reversible.
+
+- **Declarative** (`configuration.nix`, applied on `./rebuild.sh`): opts out of personalized ads, diagnostics auto-submit, usage donation, and Siri + suggestions - all via `defaults`, no SIP.
+- **`./cleanup-macos.sh`** (run on demand): disables analytics, Siri, and iCloud-Photos **user** launch agents (`gui/$UID`), leaving Apple Intelligence, core iCloud (Drive/Passwords/Notes), and Location/Find My on. It has a hardcoded do-not-disable guard (contactsd, AirPlayXPCHelper, donotdisturbd, chronod, rapportd, sharingd…) so it can't brick core UX, offers to remove unused bundled apps (GarageBand/iMovie/iWork - re-downloadable), and prints the iCloud toggles to flip by hand.
+- **`./revert-cleanup.sh`**: re-enables every agent and restores the script-set default.
+
+Nothing here needs SIP disabled or touches system daemons. See the script headers for details.
+
 ## Make it yours
 
 - **Username** - `bootstrap.sh` sets it automatically, or edit the single `user = "ryan"` line in `flake.nix`.

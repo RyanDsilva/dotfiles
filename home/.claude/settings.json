@@ -1,50 +1,82 @@
 {
   "theme": "dark-ansi",
   "includeCoAuthoredBy": false,
+  "autoMemoryEnabled": true,
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh",
     "padding": 2
   },
   "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "~/.claude/hooks/session-start.sh" } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "~/.claude/hooks/guard-bash.sh" } ] },
+      { "matcher": "Edit|Write|Read", "hooks": [ { "type": "command", "command": "~/.claude/hooks/guard-files.sh" } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write", "hooks": [ { "type": "command", "command": "~/.claude/hooks/format.sh" } ] }
+    ],
     "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "osascript -e 'display notification \"Needs your input\" with title \"Claude Code\" sound name \"Ping\"'"
-          }
-        ]
-      }
+      { "hooks": [ { "type": "command", "command": "~/.claude/hooks/notify.sh input" } ] }
     ],
     "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "osascript -e 'display notification \"Finished\" with title \"Claude Code\" sound name \"Glass\"'"
-          }
-        ]
-      }
+      { "hooks": [
+        { "type": "command", "command": "~/.claude/hooks/notify.sh done" },
+        { "type": "command", "command": "~/.claude/hooks/reflect.sh" }
+      ] }
     ]
   },
   "permissions": {
     "allow": [
       "Read",
-      "Edit",
-      "Write",
+      "Grep",
+      "Glob",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(git branch:*)",
       "Bash(ls:*)",
+      "Bash(cat:*)",
       "Bash(rg:*)",
       "Bash(fd:*)",
-      "Bash(cat:*)"
+      "Bash(eza:*)",
+      "Bash(bat:*)",
+      "Bash(just:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run:*)",
+      "Bash(pnpm:*)",
+      "Bash(bun:*)",
+      "Bash(pytest:*)",
+      "Bash(uv run:*)",
+      "Bash(ruff:*)",
+      "Bash(go test:*)",
+      "Bash(go build:*)",
+      "Bash(go vet:*)",
+      "Bash(cargo build:*)",
+      "Bash(cargo test:*)",
+      "Bash(cargo clippy:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)"
     ],
     "deny": [
-      "Bash(rm -rf:*)"
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa)",
+      "Read(**/id_ed25519)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./secrets/**)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(sudo:*)"
     ]
   }
 }
